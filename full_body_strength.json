@@ -3,7 +3,17 @@
   "notes": "",
   "exercises": [
     {
-      "name": "Kettlebell Box Squat",
+      "name": "Kettlebell Goblet Squat",
+      "rest_seconds": 90,
+      "notes": "Box squat variation — use box if available",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 25 },
+        { "duration_seconds": 45, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 30 }
+      ]
+    },
+    {
+      "name": "Gorilla Row (Kettlebell)",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -13,19 +23,9 @@
       ]
     },
     {
-      "name": "Gorilla Row",
+      "name": "Incline Push Ups",
       "rest_seconds": 90,
-      "notes": "",
-      "sets": [
-        { "duration_seconds": 60, "weight_lb": 25 },
-        { "duration_seconds": 45, "weight_lb": 25 },
-        { "duration_seconds": 30, "weight_lb": 30 }
-      ]
-    },
-    {
-      "name": "Hands Elevated Push Up",
-      "rest_seconds": 90,
-      "notes": "",
+      "notes": "Hands elevated variation",
       "sets": [
         { "duration_seconds": 60 },
         { "duration_seconds": 45 },
@@ -33,9 +33,9 @@
       ]
     },
     {
-      "name": "Kettlebell Romanian Deadlift",
+      "name": "Romanian Deadlift (Dumbbell)",
       "rest_seconds": 90,
-      "notes": "",
+      "notes": "Performed with kettlebell",
       "sets": [
         { "duration_seconds": 60, "weight_lb": 35 },
         { "duration_seconds": 45, "weight_lb": 35 },
@@ -43,9 +43,9 @@
       ]
     },
     {
-      "name": "Forearm Plank",
+      "name": "Plank",
       "rest_seconds": 60,
-      "notes": "",
+      "notes": "Forearm plank",
       "sets": [
         { "duration_seconds": 60 },
         { "duration_seconds": 45 },
@@ -53,9 +53,9 @@
       ]
     },
     {
-      "name": "Dead Ball Slam",
+      "name": "Ball Slams",
       "rest_seconds": 60,
-      "notes": "",
+      "notes": "Dead ball slam",
       "sets": [
         { "duration_seconds": 60, "weight_lb": 20 },
         { "duration_seconds": 45, "weight_lb": 20 },
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "name": "Kettlebell Farmers Carry",
+      "name": "Farmers Walk",
       "rest_seconds": 60,
       "notes": "Two kettlebells",
       "sets": [

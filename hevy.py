@@ -4,7 +4,7 @@ hevy.py — Automate routine creation in Hevy via the v1 API.
 
 Usage:
     python hevy.py list-exercises [--search TERM]
-    python hevy.py create-routine --file workout.json [--dry-run]
+    python hevy.py create-routine --file workout.json [--dry-run] [--verify]
     python hevy.py refresh-cache
 
 Environment:
@@ -204,6 +204,74 @@ def post_routine(payload: dict) -> dict:
     return resp.json()
 
 
+def get_routine(routine_id: str) -> dict:
+    resp = requests.get(
+        f"{BASE_URL}/routines/{routine_id}",
+        headers=get_headers(),
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    raw = data.get("routine") or data.get("routines") or []
+    return raw[0] if isinstance(raw, list) else raw
+
+
+def verify_routine(routine: dict, workout_def: dict, resolution_log: list) -> bool:
+    """Compare fetched routine against expected workout definition. Returns True if all match."""
+    resolved = {original: matched for original, matched, _ in resolution_log}
+    expected_exercises = workout_def["exercises"]
+    actual_exercises = routine.get("exercises", [])
+
+    passed = True
+
+    print("\n── Verification ──")
+
+    if len(actual_exercises) != len(expected_exercises):
+        print(f"  ✗ Exercise count: expected {len(expected_exercises)}, got {len(actual_exercises)}")
+        passed = False
+
+    for i, (exp, act) in enumerate(zip(expected_exercises, actual_exercises)):
+        exp_name = resolved.get(exp["name"], exp["name"])
+        act_name = act.get("title", "")
+        name_ok = exp_name.lower() == act_name.lower()
+
+        exp_sets = exp["sets"]
+        act_sets = act.get("sets", [])
+        sets_count_ok = len(exp_sets) == len(act_sets)
+
+        set_details_ok = True
+        set_mismatches = []
+        for j, (es, as_) in enumerate(zip(exp_sets, act_sets)):
+            exp_reps = es.get("reps")
+            act_reps = as_.get("reps")
+            exp_dur = es.get("duration_seconds")
+            act_dur = as_.get("duration_seconds")
+            exp_kg = round(es["weight_lb"] * 0.453592, 3) if "weight_lb" in es else es.get("weight_kg")
+            act_kg = as_.get("weight_kg")
+
+            if exp_reps != act_reps or exp_dur != act_dur or (exp_kg and act_kg and abs(exp_kg - act_kg) > 0.01):
+                set_details_ok = False
+                set_mismatches.append(
+                    f"    set {j+1}: expected reps={exp_reps} dur={exp_dur} kg={exp_kg}, "
+                    f"got reps={act_reps} dur={act_dur} kg={act_kg}"
+                )
+
+        status = "✓" if (name_ok and sets_count_ok and set_details_ok) else "✗"
+        print(f"  {status} [{i+1}] {act_name}", end="")
+        if not name_ok:
+            print(f" (expected '{exp_name}')", end="")
+        if not sets_count_ok:
+            print(f" — sets: expected {len(exp_sets)}, got {len(act_sets)}", end="")
+        print()
+        for m in set_mismatches:
+            print(m)
+
+        if not (name_ok and sets_count_ok and set_details_ok):
+            passed = False
+
+    print(f"\n{'  All checks passed ✓' if passed else '  Some checks failed ✗'}")
+    return passed
+
+
 # ── CLI commands ──────────────────────────────────────────────────────────────
 
 def cmd_refresh_cache(_args):
@@ -272,6 +340,10 @@ def cmd_create_routine(args):
         print(f"\n✓ Routine created successfully!")
         print(f"  ID: {routine_id}")
         print(f"  Title: {routine.get('title')}")
+
+        if args.verify:
+            fetched = get_routine(routine_id)
+            verify_routine(fetched, workout_def, resolution_log)
     except requests.HTTPError as e:
         print(f"\nERROR: API request failed: {e}")
         print(f"Response: {e.response.text}")
@@ -300,6 +372,8 @@ def main():
     p_create.add_argument("--file", "-f", required=True, help="Path to workout JSON file")
     p_create.add_argument("--dry-run", action="store_true",
                           help="Print payload without sending to API")
+    p_create.add_argument("--verify", action="store_true",
+                          help="Fetch created routine and verify it matches the input file")
 
     args = parser.parse_args()
     {

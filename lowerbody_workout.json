@@ -3,16 +3,16 @@
   "notes": "",
   "exercises": [
     {
-      "name": "Smith Machine Box Squat",
+      "name": "Squat (Smith Machine)",
       "rest_seconds": 90,
-      "notes": "",
+      "notes": "Box squat variation — use box if available",
       "sets": [
         { "reps": 12, "weight_lb": 55 },
         { "reps": 12, "weight_lb": 105 }
       ]
     },
     {
-      "name": "Leg Press",
+      "name": "Leg Press (Machine)",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -21,16 +21,16 @@
       ]
     },
     {
-      "name": "Prone Lying Hamstring Curl Machine",
+      "name": "Lying Leg Curl (Machine)",
       "rest_seconds": 90,
-      "notes": "",
+      "notes": "Prone/lying variation if machine available",
       "sets": [
         { "reps": 10, "weight_lb": 40 },
         { "reps": 10, "weight_lb": 40 }
       ]
     },
     {
-      "name": "Leg Extension Machine",
+      "name": "Leg Extension (Machine)",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -39,9 +39,9 @@
       ]
     },
     {
-      "name": "Hip Abductor Machine",
+      "name": "Hip Abduction (Machine)",
       "rest_seconds": 60,
-      "notes": "Superset with adductor",
+      "notes": "Superset with adduction",
       "superset_id": 1,
       "sets": [
         { "reps": 10, "weight_lb": 70 },
@@ -49,9 +49,9 @@
       ]
     },
     {
-      "name": "Hip Adductor Machine",
+      "name": "Hip Adduction (Machine)",
       "rest_seconds": 60,
-      "notes": "Superset with abductor",
+      "notes": "Superset with abduction",
       "superset_id": 1,
       "sets": [
         { "reps": 10, "weight_lb": 70 },
@@ -68,16 +68,26 @@
       ]
     },
     {
-      "name": "Feet Elevated Calf Raise",
+      "name": "Standing Calf Raise",
       "rest_seconds": 60,
-      "notes": "",
+      "notes": "Feet elevated variation",
       "sets": [
         { "reps": 15 },
         { "reps": 15 }
       ]
     },
     {
-      "name": "Table Top Crunch",
+      "name": "Crunch",
+      "rest_seconds": 60,
+      "notes": "Table top crunch",
+      "sets": [
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 }
+      ]
+    },
+    {
+      "name": "Lying Leg Raise",
       "rest_seconds": 60,
       "notes": "",
       "sets": [
@@ -87,19 +97,9 @@
       ]
     },
     {
-      "name": "Lying Leg Raises",
+      "name": "Air Bike",
       "rest_seconds": 60,
-      "notes": "",
-      "sets": [
-        { "duration_seconds": 30 },
-        { "duration_seconds": 30 },
-        { "duration_seconds": 30 }
-      ]
-    },
-    {
-      "name": "Assault Bike",
-      "rest_seconds": 60,
-      "notes": "",
+      "notes": "Assault bike",
       "sets": [
         { "duration_seconds": 45 },
         { "duration_seconds": 45 }

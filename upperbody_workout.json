@@ -3,7 +3,7 @@
   "notes": "",
   "exercises": [
     {
-      "name": "Lat Pulldown",
+      "name": "Lat Pulldown (Cable)",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "name": "Cable Rope Tricep Pushdown",
+      "name": "Triceps Rope Pushdown",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -23,9 +23,9 @@
       ]
     },
     {
-      "name": "Arsenal Chest Press",
+      "name": "Chest Press (Machine)",
       "rest_seconds": 90,
-      "notes": "",
+      "notes": "Arsenal chest press machine",
       "sets": [
         { "reps": 10, "weight_lb": 0,  "type": "warmup" },
         { "reps": 8,  "weight_lb": 30 },
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name": "Seated Dumbbell Military Press",
+      "name": "Seated Overhead Press (Dumbbell)",
       "rest_seconds": 90,
       "notes": "",
       "sets": [
@@ -43,9 +43,9 @@
       ]
     },
     {
-      "name": "Seated Alternating Dumbbell Bicep Curl",
+      "name": "Seated Incline Curl (Dumbbell)",
       "rest_seconds": 90,
-      "notes": "",
+      "notes": "Alternating",
       "sets": [
         { "reps": 20, "weight_lb": 20 },
         { "reps": 16, "weight_lb": 20 },
@@ -53,18 +53,18 @@
       ]
     },
     {
-      "name": "Ab marches w/ 25lb Plate",
+      "name": "Crunch",
       "rest_seconds": 60,
-      "notes": "",
+      "notes": "Ab marches with 25lb plate",
       "sets": [
         { "duration_seconds": 30, "weight_lb": 25 },
         { "duration_seconds": 30, "weight_lb": 25 }
       ]
     },
     {
-      "name": "Standing Oblique Leans",
+      "name": "Oblique Crunch",
       "rest_seconds": 60,
-      "notes": "",
+      "notes": "Standing oblique leans with 25lb plate",
       "sets": [
         { "duration_seconds": 30, "weight_lb": 25 },
         { "duration_seconds": 30, "weight_lb": 25 }
