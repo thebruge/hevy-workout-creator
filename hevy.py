@@ -469,11 +469,21 @@ def main():
     p_create.add_argument("--verify", action="store_true",
                           help="Fetch created routine and verify it matches the input file")
 
+    # serve
+    p_serve = sub.add_parser("serve", help="Start local UI server with API proxy")
+    p_serve.add_argument("--port", type=int, default=8000, help="Port to listen on (default: 8000)")
+
+    # build-ui
+    p_build = sub.add_parser("build-ui", help="Bake exercise cache into index.html for offline use")
+    p_build.add_argument("--output", default="index.html", help="Output file (default: index.html)")
+
     args = parser.parse_args()
     {
         "refresh-cache": cmd_refresh_cache,
         "list-exercises": cmd_list_exercises,
         "create-routine": cmd_create_routine,
+        "serve": cmd_serve,
+        "build-ui": cmd_build_ui,
     }[args.command](args)
 
 
