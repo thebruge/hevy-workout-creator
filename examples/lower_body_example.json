@@ -1,0 +1,66 @@
+{
+  "title": "Lower Body — Strength",
+  "notes": "Compound-focused lower body session",
+  "exercises": [
+    {
+      "name": "Squat (Barbell)",
+      "rest_seconds": 180,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 95,  "type": "warmup" },
+        { "reps": 5,  "weight_lb": 185 },
+        { "reps": 5,  "weight_lb": 205 },
+        { "reps": 3,  "weight_lb": 225 }
+      ]
+    },
+    {
+      "name": "Romanian Deadlift (Barbell)",
+      "rest_seconds": 120,
+      "notes": "",
+      "sets": [
+        { "reps": 8, "weight_lb": 135 },
+        { "reps": 8, "weight_lb": 155 },
+        { "reps": 6, "weight_lb": 175 }
+      ]
+    },
+    {
+      "name": "Leg Press (Machine)",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 12, "weight_lb": 180 },
+        { "reps": 10, "weight_lb": 230 },
+        { "reps": 8,  "weight_lb": 270 }
+      ]
+    },
+    {
+      "name": "Lying Leg Curl (Machine)",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 12, "weight_lb": 50 },
+        { "reps": 10, "weight_lb": 60 },
+        { "reps": 8,  "weight_lb": 70 }
+      ]
+    },
+    {
+      "name": "Walking Lunge",
+      "rest_seconds": 90,
+      "notes": "Dumbbell in each hand",
+      "sets": [
+        { "reps": 12, "weight_lb": 30 },
+        { "reps": 12, "weight_lb": 35 }
+      ]
+    },
+    {
+      "name": "Standing Calf Raise",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "reps": 15, "weight_lb": 50 },
+        { "reps": 15, "weight_lb": 60 },
+        { "reps": 12, "weight_lb": 70 }
+      ]
+    }
+  ]
+}

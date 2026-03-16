@@ -1,0 +1,78 @@
+{
+  "title": "Upper Body — Push/Pull",
+  "notes": "Classic push/pull upper body split",
+  "exercises": [
+    {
+      "name": "Bench Press (Barbell)",
+      "rest_seconds": 120,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 95,  "type": "warmup" },
+        { "reps": 8,  "weight_lb": 135 },
+        { "reps": 6,  "weight_lb": 155 },
+        { "reps": 4,  "weight_lb": 175 }
+      ]
+    },
+    {
+      "name": "Bent Over Row (Barbell)",
+      "rest_seconds": 120,
+      "notes": "",
+      "sets": [
+        { "reps": 8,  "weight_lb": 115 },
+        { "reps": 8,  "weight_lb": 135 },
+        { "reps": 6,  "weight_lb": 155 }
+      ]
+    },
+    {
+      "name": "Overhead Press (Barbell)",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 65  },
+        { "reps": 8,  "weight_lb": 85  },
+        { "reps": 6,  "weight_lb": 95  }
+      ]
+    },
+    {
+      "name": "Lat Pulldown (Cable)",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 80  },
+        { "reps": 8,  "weight_lb": 100 },
+        { "reps": 6,  "weight_lb": 110 }
+      ]
+    },
+    {
+      "name": "Triceps Rope Pushdown",
+      "rest_seconds": 60,
+      "notes": "",
+      "superset_id": 1,
+      "sets": [
+        { "reps": 12, "weight_lb": 30 },
+        { "reps": 12, "weight_lb": 35 },
+        { "reps": 10, "weight_lb": 40 }
+      ]
+    },
+    {
+      "name": "Seated Incline Curl (Dumbbell)",
+      "rest_seconds": 60,
+      "notes": "Superset with triceps",
+      "superset_id": 1,
+      "sets": [
+        { "reps": 12, "weight_lb": 20 },
+        { "reps": 10, "weight_lb": 25 },
+        { "reps": 8,  "weight_lb": 25 }
+      ]
+    },
+    {
+      "name": "Plank",
+      "rest_seconds": 60,
+      "notes": "Forearm plank — core finisher",
+      "sets": [
+        { "duration_seconds": 60 },
+        { "duration_seconds": 45 }
+      ]
+    }
+  ]
+}
