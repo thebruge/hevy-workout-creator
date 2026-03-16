@@ -407,7 +407,7 @@ def cmd_serve(args):
                 self.end_headers()
 
         def log_message(self, fmt, *a):
-            if "/proxy/" in (a[0] if a else ""):
+            if a and isinstance(a[0], str) and "/proxy/" in a[0]:
                 super().log_message(fmt, *a)
 
     port = args.port
