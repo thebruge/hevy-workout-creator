@@ -18,6 +18,9 @@ import argparse
 import requests
 from pathlib import Path
 from difflib import get_close_matches
+from dotenv import load_dotenv
+
+load_dotenv()  # loads .env from cwd or any parent directory
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
@@ -184,6 +187,7 @@ def build_routine_payload(workout_def: dict, cache: dict) -> dict:
     return {
         "routine": {
             "title": workout_def["title"],
+            "folder_id": workout_def.get("folder_id", None),
             "notes": workout_def.get("notes", ""),
             "exercises": exercises,
         }
@@ -262,10 +266,12 @@ def cmd_create_routine(args):
     print("\nPosting to Hevy API...")
     try:
         result = post_routine(payload)
-        routine_id = result.get("routine", {}).get("id", "unknown")
+        raw = result.get("routine") or result.get("routines") or []
+        routine = raw[0] if isinstance(raw, list) else raw
+        routine_id = routine.get("id", "unknown")
         print(f"\n✓ Routine created successfully!")
         print(f"  ID: {routine_id}")
-        print(f"  Title: {result.get('routine', {}).get('title')}")
+        print(f"  Title: {routine.get('title')}")
     except requests.HTTPError as e:
         print(f"\nERROR: API request failed: {e}")
         print(f"Response: {e.response.text}")
