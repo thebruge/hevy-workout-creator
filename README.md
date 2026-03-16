@@ -1,6 +1,6 @@
 # hevy-workout-creator
 
-Automate routine creation in the [Hevy](https://hevyapp.com) workout app via the v1 API. Define your workouts in JSON and push them directly to Hevy as reusable routines.
+Automate routine creation in the [Hevy](https://hevyapp.com) workout app via the v1 API. Define your workouts in JSON and push them directly to Hevy as reusable routines — or use the local web UI to build routines visually.
 
 ## Setup
 
@@ -104,6 +104,47 @@ Assign the same `superset_id` (any integer) to exercises that should be grouped 
 |------|-------------|
 | `examples/upper_body_example.json` | Push/pull upper body with superset finisher |
 | `examples/lower_body_example.json` | Compound-focused lower body strength session |
+
+## Web UI
+
+A visual routine builder is available at `index.html`. It lets you search exercises, configure sets, reorder exercises, and push directly to Hevy — without editing JSON files.
+
+### Served mode (recommended)
+
+```bash
+python hevy.py serve            # default port 8000
+python hevy.py serve --port 9000
+```
+
+Opens a local server that:
+- Serves `index.html` at `http://localhost:8000`
+- Proxies `POST /proxy/routines` to the Hevy API with your API key injected server-side (key never touches the browser)
+
+Open `http://localhost:8000` in your browser, build your routine, click **Push to Hevy**.
+
+### Standalone mode (offline)
+
+Bake the exercise cache directly into `index.html` so it works without a server:
+
+```bash
+python hevy.py build-ui                      # overwrites index.html
+python hevy.py build-ui --output my_ui.html  # write to a different file
+```
+
+Open the output file with `file://` in your browser. Switch to **Direct** mode in Settings, enter your API key, and push.
+
+### UI features
+
+- Live exercise search with muscle group and equipment filters
+- Rep-based and timed (duration) sets per exercise
+- Warmup / Normal / Drop set types
+- Superset grouping (color-coded borders)
+- ▲/▼ reorder exercises
+- **Save as JSON** — downloads a file compatible with `create-routine --file`
+- **Load JSON** — load an existing workout JSON file into the builder
+- Draft auto-saved to `localStorage` — survives page reloads
+
+---
 
 ## Notes on the Hevy API
 

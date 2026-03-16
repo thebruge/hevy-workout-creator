@@ -350,6 +350,100 @@ def cmd_create_routine(args):
         sys.exit(1)
 
 
+# ── Web UI commands ───────────────────────────────────────────────────────────
+
+def cmd_serve(args):
+    """Start a local HTTP server that serves the UI and proxies API calls."""
+    import threading
+    import urllib.request
+    import urllib.error
+    from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+    api_key = os.environ.get("HEVY_API_KEY")
+    if not api_key:
+        print("ERROR: HEVY_API_KEY environment variable not set.")
+        sys.exit(1)
+
+    ui_dir = Path(__file__).parent
+
+    class HevyHandler(SimpleHTTPRequestHandler):
+        def __init__(self, *a, **kw):
+            super().__init__(*a, directory=str(ui_dir), **kw)
+
+        def do_OPTIONS(self):
+            self.send_response(200)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.end_headers()
+
+        def do_POST(self):
+            if self.path == "/proxy/routines":
+                length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(length)
+                req = urllib.request.Request(
+                    f"{BASE_URL}/routines",
+                    data=body,
+                    headers={"api-key": api_key, "Content-Type": "application/json"},
+                    method="POST",
+                )
+                try:
+                    with urllib.request.urlopen(req) as resp:
+                        result = resp.read()
+                        self.send_response(200)
+                        self.send_header("Content-Type", "application/json")
+                        self.send_header("Access-Control-Allow-Origin", "*")
+                        self.end_headers()
+                        self.wfile.write(result)
+                except urllib.error.HTTPError as e:
+                    error_body = e.read()
+                    self.send_response(e.code)
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Access-Control-Allow-Origin", "*")
+                    self.end_headers()
+                    self.wfile.write(error_body)
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        def log_message(self, fmt, *a):
+            if "/proxy/" in (a[0] if a else ""):
+                super().log_message(fmt, *a)
+
+    port = args.port
+    server = HTTPServer(("localhost", port), HevyHandler)
+    print(f"Hevy UI running at http://localhost:{port}")
+    print(f"Press Ctrl+C to stop.")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
+
+
+def cmd_build_ui(args):
+    """Bake exercise_cache.json into index.html for standalone offline use."""
+    cache = load_cache()
+    cache_json = json.dumps(cache["all"], separators=(",", ":"))
+
+    source = Path(__file__).parent / "index.html"
+    if not source.exists():
+        print("ERROR: index.html not found in project directory.")
+        sys.exit(1)
+
+    html = source.read_text()
+    sentinel = "/* __EXERCISE_CACHE_PLACEHOLDER__ */"
+    if sentinel not in html:
+        print("ERROR: sentinel comment not found in index.html.")
+        sys.exit(1)
+
+    baked = html.replace(sentinel, f"window.EXERCISE_CACHE = {cache_json};")
+    output = Path(args.output)
+    output.write_text(baked)
+    print(f"Built standalone UI → {output}")
+    print(f"  Baked {len(cache['all'])} exercises")
+    print(f"  Open with: open {output}")
+
+
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 def main():

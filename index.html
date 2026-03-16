@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hevy Routine Builder</title>
+<style>
+  /* ── Reset & Variables ──────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #252525;
+    --surface3: #2e2e2e;
+    --border: #333;
+    --border2: #444;
+    --text: #e8e8e8;
+    --text2: #aaa;
+    --text3: #666;
+    --accent: #e86c2c;
+    --accent-hover: #f07d3e;
+    --accent2: #2ca9e8;
+    --success: #4caf50;
+    --danger: #e85555;
+    --danger-hover: #f06666;
+    --radius: 8px;
+    --radius-sm: 5px;
+
+    --sup1: #7c3aed; --sup2: #0ea5e9; --sup3: #10b981;
+    --sup4: #f59e0b; --sup5: #ef4444; --sup6: #ec4899;
+    --sup7: #8b5cf6; --sup8: #14b8a6;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    padding-bottom: 80px;
+  }
+
+  /* ── Utilities ────────────────────────────────────────────── */
+  .hidden { display: none !important; }
+  .flex { display: flex; }
+  .gap-sm { gap: 8px; }
+  .gap { gap: 12px; }
+  input, select, textarea, button {
+    font-family: inherit; font-size: 14px; color: var(--text);
+  }
+  input, select, textarea {
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 6px 10px;
+    outline: none; transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  select { cursor: pointer; }
+  select option { background: var(--surface2); }
+  button {
+    cursor: pointer; border: none; border-radius: var(--radius-sm);
+    padding: 6px 14px; transition: background 0.15s, opacity 0.15s;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  .btn-primary {
+    background: var(--accent); color: #fff; font-weight: 600; padding: 9px 20px;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+  .btn-secondary {
+    background: var(--surface3); color: var(--text); border: 1px solid var(--border2);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--surface2); border-color: var(--accent); }
+  .btn-ghost {
+    background: transparent; color: var(--text2); padding: 4px 8px;
+  }
+  .btn-ghost:hover { color: var(--text); background: var(--surface3); }
+  .btn-danger {
+    background: transparent; color: var(--danger); padding: 4px 8px;
+  }
+  .btn-danger:hover { color: var(--danger-hover); background: var(--surface3); }
+  .btn-add {
+    background: transparent; color: var(--accent2); border: 1px dashed var(--accent2);
+    border-radius: var(--radius-sm); padding: 5px 12px; font-size: 13px;
+  }
+  .btn-add:hover { background: rgba(44,169,232,0.08); }
+
+  /* ── Header ─────────────────────────────────────────────── */
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
+  #settings-btn { font-size: 18px; background: none; padding: 4px 8px; color: var(--text2); }
+  #settings-btn:hover { color: var(--text); }
+
+  /* ── Main Layout ─────────────────────────────────────────── */
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px; }
+
+  /* ── Routine Meta ─────────────────────────────────────────── */
+  #routine-meta {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 16px;
+  }
+  #routine-meta h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text3); margin-bottom: 12px; }
+  .meta-fields { display: flex; gap: 12px; flex-wrap: wrap; }
+  .meta-fields input { flex: 1 1 200px; }
+  .meta-fields textarea {
+    flex: 2 1 300px; resize: vertical; min-height: 56px; line-height: 1.4;
+  }
+
+  /* ── Exercise Search ──────────────────────────────────────── */
+  #search-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 16px; overflow: hidden;
+  }
+  #search-header {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  #search-header h2 { font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--text3); margin-right: 4px; }
+  #search-input { flex: 1 1 200px; }
+  #muscle-filter, #equip-filter { flex: 0 0 auto; }
+  #search-results { max-height: 260px; overflow-y: auto; }
+  .search-item {
+    display: flex; align-items: center; padding: 8px 16px; gap: 10px;
+    border-bottom: 1px solid var(--border); cursor: default;
+    transition: background 0.1s;
+  }
+  .search-item:last-child { border-bottom: none; }
+  .search-item:hover { background: var(--surface2); }
+  .search-item-name { flex: 1; font-weight: 500; }
+  .search-item-meta { color: var(--text3); font-size: 12px; min-width: 140px; }
+  .search-item-add { flex: 0 0 auto; }
+  #search-empty { padding: 24px 16px; text-align: center; color: var(--text3); font-size: 13px; }
+
+  /* ── Exercise Cards ───────────────────────────────────────── */
+  #exercises-section h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text3); margin-bottom: 10px;
+  }
+  #exercise-list { display: flex; flex-direction: column; gap: 12px; }
+  #no-exercises {
+    background: var(--surface); border: 1px dashed var(--border);
+    border-radius: var(--radius); padding: 32px 16px;
+    text-align: center; color: var(--text3); font-size: 13px;
+  }
+
+  .ex-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    border-left: 3px solid var(--border);
+  }
+  .ex-card[data-sup="1"] { border-left-color: var(--sup1); }
+  .ex-card[data-sup="2"] { border-left-color: var(--sup2); }
+  .ex-card[data-sup="3"] { border-left-color: var(--sup3); }
+  .ex-card[data-sup="4"] { border-left-color: var(--sup4); }
+  .ex-card[data-sup="5"] { border-left-color: var(--sup5); }
+  .ex-card[data-sup="6"] { border-left-color: var(--sup6); }
+  .ex-card[data-sup="7"] { border-left-color: var(--sup7); }
+  .ex-card[data-sup="8"] { border-left-color: var(--sup8); }
+
+  .ex-card-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+  }
+  .ex-reorder { display: flex; flex-direction: column; gap: 2px; }
+  .ex-reorder button { padding: 1px 5px; font-size: 12px; line-height: 1.2; }
+  .ex-name { flex: 1; font-weight: 600; font-size: 14px; }
+  .ex-type-badge {
+    font-size: 11px; color: var(--text3);
+    background: var(--surface3); border-radius: 4px; padding: 2px 6px;
+  }
+
+  .ex-card-meta {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .ex-card-meta label { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 5px; }
+  .ex-card-meta input, .ex-card-meta select { padding: 3px 7px; font-size: 13px; }
+  .ex-card-meta input[type="number"] { width: 64px; }
+  .ex-card-meta .meta-notes { flex: 1 1 160px; }
+
+  .ex-card-sets { padding: 8px 12px 6px; }
+  .set-header {
+    display: grid; font-size: 11px; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 0 0 4px; border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+  .set-row { display: grid; align-items: center; gap: 6px; padding: 3px 0; }
+
+  /* Grid columns: # type reps/dur weight del */
+  .set-header,
+  .set-row {
+    grid-template-columns: 22px 100px 1fr 100px 28px;
+  }
+  .set-row.no-weight {
+    grid-template-columns: 22px 100px 1fr 28px;
+  }
+  .set-header.no-weight {
+    grid-template-columns: 22px 100px 1fr 28px;
+  }
+  .set-num { color: var(--text3); font-size: 12px; text-align: center; }
+  .set-type-sel { font-size: 12px; padding: 3px 5px; }
+  .set-amount { display: flex; align-items: center; gap: 4px; }
+  .set-amount input { width: 60px; }
+  .set-amount .set-mode-btn {
+    background: var(--surface3); border: 1px solid var(--border2);
+    color: var(--text2); font-size: 11px; padding: 3px 7px; border-radius: 4px;
+  }
+  .set-amount .set-mode-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .set-weight input { width: 80px; }
+  .set-weight { display: flex; align-items: center; gap: 4px; }
+  .set-weight span { font-size: 12px; color: var(--text3); }
+  .set-del { text-align: center; }
+
+  .ex-card-footer { padding: 6px 12px 10px; }
+
+  /* ── Sticky Action Bar ─────────────────────────────────────── */
+  #action-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    z-index: 200;
+  }
+  #action-bar .spacer { flex: 1; }
+  #status-msg { font-size: 13px; color: var(--text2); }
+  #status-msg.ok { color: var(--success); }
+  #status-msg.err { color: var(--danger); }
+
+  /* ── Settings Drawer ─────────────────────────────────────── */
+  #settings-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300;
+    display: flex; justify-content: flex-end;
+  }
+  #settings-drawer {
+    background: var(--surface); width: 320px; max-width: 100%;
+    padding: 20px; display: flex; flex-direction: column; gap: 16px;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  #settings-drawer h2 { font-size: 16px; font-weight: 700; }
+  .setting-group label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+  .setting-group input, .setting-group select { width: 100%; }
+  .setting-group textarea { width: 100%; resize: vertical; }
+  #mode-radio { display: flex; gap: 10px; }
+  .radio-btn {
+    flex: 1; text-align: center; padding: 8px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border2); cursor: pointer;
+    background: var(--surface3); color: var(--text2); transition: all 0.15s;
+    font-size: 13px;
+  }
+  .radio-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(232,108,44,0.1); }
+  #settings-close { align-self: flex-start; }
+
+  /* ── Load Draft banner ─────────────────────────────────────── */
+  #draft-banner {
+    background: rgba(44,169,232,0.1); border: 1px solid var(--accent2);
+    border-radius: var(--radius); padding: 10px 16px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px; font-size: 13px;
+  }
+  #draft-banner .spacer { flex: 1; }
+
+  /* ── Scrollbar ─────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ─────────────────────────────────────────────────── -->
+<header>
+  <h1>Hevy Routine Builder</h1>
+  <button id="settings-btn" title="Settings">⚙</button>
+</header>
+
+<!-- ── Main ───────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Draft banner -->
+  <div id="draft-banner" class="hidden">
+    <span>📋 Draft routine found — <strong id="draft-title"></strong></span>
+    <span class="spacer"></span>
+    <button class="btn-secondary" id="draft-restore-btn">Restore</button>
+    <button class="btn-ghost" id="draft-dismiss-btn">Dismiss</button>
+  </div>
+
+  <!-- Routine metadata -->
+  <div id="routine-meta">
+    <h2>Routine</h2>
+    <div class="meta-fields">
+      <input id="routine-title" type="text" placeholder="Routine title (required)" autocomplete="off">
+      <textarea id="routine-notes" placeholder="Notes (optional)" rows="2"></textarea>
+    </div>
+  </div>
+
+  <!-- Exercise search -->
+  <div id="search-panel">
+    <div id="search-header">
+      <h2>Add Exercise</h2>
+      <input id="search-input" type="text" placeholder="Search exercises…" autocomplete="off">
+      <select id="muscle-filter"><option value="">All muscles</option></select>
+      <select id="equip-filter"><option value="">All equipment</option></select>
+    </div>
+    <div id="search-results">
+      <div id="search-empty">Loading exercise catalog…</div>
+    </div>
+  </div>
+
+  <!-- Exercise list -->
+  <div id="exercises-section">
+    <h2>Exercises</h2>
+    <div id="exercise-list"></div>
+    <div id="no-exercises">No exercises yet — search above to add some.</div>
+  </div>
+
+</main>
+
+<!-- ── Action Bar ──────────────────────────────────────────────── -->
+<div id="action-bar">
+  <button class="btn-secondary" id="save-json-btn">⬇ Save as JSON</button>
+  <button class="btn-secondary" id="load-json-btn">⬆ Load JSON</button>
+  <input id="load-json-input" type="file" accept=".json" class="hidden">
+  <span class="spacer"></span>
+  <span id="status-msg"></span>
+  <button class="btn-primary" id="push-btn">Push to Hevy</button>
+</div>
+
+<!-- ── Settings Drawer ─────────────────────────────────────────── -->
+<div id="settings-overlay" class="hidden">
+  <div id="settings-drawer">
+    <div class="flex" style="align-items:center;justify-content:space-between">
+      <h2>Settings</h2>
+      <button class="btn-ghost" id="settings-close">✕</button>
+    </div>
+
+    <div class="setting-group">
+      <label>Mode</label>
+      <div id="mode-radio">
+        <div class="radio-btn active" data-mode="proxy">Proxy (recommended)</div>
+        <div class="radio-btn" data-mode="direct">Direct</div>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5;">
+        <strong style="color:var(--text2)">Proxy:</strong> Run <code>python hevy.py serve</code> first. API key stays on your machine.<br>
+        <strong style="color:var(--text2)">Direct:</strong> Calls Hevy API from browser. Enter your API key below.
+      </p>
+    </div>
+
+    <div class="setting-group" id="api-key-group" style="display:none">
+      <label>Hevy API Key</label>
+      <input id="api-key-input" type="password" placeholder="Paste API key…" autocomplete="off">
+      <p style="font-size:12px;color:var(--text3);margin-top:4px;">
+        Stored in localStorage. Get yours at hevy.com/settings?developer
+      </p>
+    </div>
+
+    <div class="setting-group">
+      <label>Proxy URL</label>
+      <input id="proxy-url-input" type="text" value="http://localhost:8000" autocomplete="off">
+    </div>
+
+    <div class="setting-group">
+      <label>Folder ID <span style="color:var(--text3)">(optional)</span></label>
+      <input id="folder-id-input" type="text" placeholder="Leave blank for default" autocomplete="off">
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding-top:12px">
+      <button class="btn-secondary" id="clear-draft-btn" style="width:100%">Clear Draft</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Exercise cache injection point ────────────────────────────── */
+/* __EXERCISE_CACHE_PLACEHOLDER__ */
+
+/* ── State ─────────────────────────────────────────────────────── */
+const DRAFT_KEY = 'hevy_draft';
+const SETTINGS_KEY = 'hevy_settings';
+
+let exerciseCache = []; // [{id, title, type, primary_muscle_group, equipment_category, ...}]
+
+const settings = Object.assign({
+  mode: 'proxy',
+  apiKey: '',
+  proxyUrl: 'http://localhost:8000',
+  folderId: '',
+}, JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'));
+
+let routine = {
+  title: '',
+  notes: '',
+  exercises: [],
+};
+
+// Each exercise: { _uid, id (template_id), name, exType, rest_seconds, notes, superset_id, sets: [...] }
+// Each set: { _uid, setType, mode ('reps'|'sec'), reps, duration_seconds, weight_lb }
+
+let _uid = 1;
+const uid = () => String(_uid++);
+
+/* ── Save / Load settings ───────────────────────────────────────── */
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+/* ── Draft auto-save ─────────────────────────────────────────────── */
+function saveDraft() {
+  if (!routine.title && routine.exercises.length === 0) return;
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(routine));
+}
+
+function clearDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+}
+
+/* ── Cache loading ──────────────────────────────────────────────── */
+async function loadCache() {
+  // If build-ui baked the cache in, use it directly
+  if (window.EXERCISE_CACHE && Array.isArray(window.EXERCISE_CACHE)) {
+    initCache(window.EXERCISE_CACHE);
+    return;
+  }
+  // Otherwise fetch from local server
+  try {
+    const r = await fetch('./exercise_cache.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    // cache file has { all: [...], by_title: {...}, by_title_lower: {...} }
+    initCache(data.all || data);
+  } catch (e) {
+    document.getElementById('search-empty').textContent =
+      'Could not load exercise cache. Run: python hevy.py refresh-cache';
+  }
+}
+
+function initCache(templates) {
+  exerciseCache = templates;
+  populateFilters();
+  renderSearchResults('');
+}
+
+/* ── Filters ────────────────────────────────────────────────────── */
+function populateFilters() {
+  const muscles = new Set();
+  const equips = new Set();
+  exerciseCache.forEach(t => {
+    if (t.primary_muscle_group) muscles.add(t.primary_muscle_group);
+    if (t.equipment_category) equips.add(t.equipment_category);
+  });
+  const muscleEl = document.getElementById('muscle-filter');
+  const equipEl = document.getElementById('equip-filter');
+  [...muscles].sort().forEach(m => {
+    muscleEl.insertAdjacentHTML('beforeend', `<option value="${esc(m)}">${esc(m)}</option>`);
+  });
+  [...equips].sort().forEach(e => {
+    equipEl.insertAdjacentHTML('beforeend', `<option value="${esc(e)}">${esc(e)}</option>`);
+  });
+}
+
+/* ── Search ─────────────────────────────────────────────────────── */
+function renderSearchResults(query) {
+  const muscle = document.getElementById('muscle-filter').value;
+  const equip = document.getElementById('equip-filter').value;
+  const q = query.toLowerCase();
+
+  let results = exerciseCache.filter(t => {
+    const matchQ = !q || t.title.toLowerCase().includes(q) ||
+      (t.primary_muscle_group || '').toLowerCase().includes(q) ||
+      (t.equipment_category || '').toLowerCase().includes(q);
+    const matchM = !muscle || t.primary_muscle_group === muscle;
+    const matchE = !equip || t.equipment_category === equip;
+    return matchQ && matchM && matchE;
+  });
+
+  const container = document.getElementById('search-results');
+  const empty = document.getElementById('search-empty');
+
+  if (results.length === 0) {
+    empty.textContent = 'No exercises match your search.';
+    empty.classList.remove('hidden');
+    // Clear old items
+    [...container.querySelectorAll('.search-item')].forEach(el => el.remove());
+    return;
+  }
+  empty.classList.add('hidden');
+
+  const shown = results.slice(0, 60);
+  // Diff: remove extras, update/add
+  const existing = [...container.querySelectorAll('.search-item')];
+  existing.forEach(el => el.remove());
+
+  const frag = document.createDocumentFragment();
+  shown.forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'search-item';
+    div.dataset.id = t.id;
+    div.innerHTML = `
+      <span class="search-item-name">${esc(t.title)}</span>
+      <span class="search-item-meta">${esc(t.primary_muscle_group || '—')} · ${esc(t.equipment_category || '—')}</span>
+      <button class="btn-add search-item-add" data-id="${esc(t.id)}" data-title="${esc(t.title)}" data-extype="${esc(t.type || 'weight_reps')}">+ Add</button>
+    `;
+    frag.appendChild(div);
+  });
+  container.appendChild(frag);
+
+  if (results.length > 60) {
+    const info = document.createElement('div');
+    info.style.cssText = 'padding:8px 16px;font-size:12px;color:var(--text3);text-align:center;';
+    info.textContent = `${results.length - 60} more — refine your search`;
+    container.appendChild(info);
+  }
+}
+
+/* ── Determine set columns from exercise type ─────────────────── */
+function exTypeInfo(exType) {
+  // Hevy exercise types: weight_reps, reps_only, duration, bodyweight_weighted, bodyweight_reps
+  const timed = exType === 'duration';
+  const noWeight = exType === 'reps_only' || exType === 'bodyweight_reps';
+  return { timed, noWeight };
+}
+
+/* ── Add exercise ───────────────────────────────────────────────── */
+function addExercise(id, title, exType) {
+  const { timed } = exTypeInfo(exType);
+  const defaultSet = timed
+    ? { _uid: uid(), setType: 'normal', mode: 'sec', reps: null, duration_seconds: 60, weight_lb: null }
+    : { _uid: uid(), setType: 'normal', mode: 'reps', reps: 10, duration_seconds: null, weight_lb: null };
+
+  routine.exercises.push({
+    _uid: uid(),
+    id,
+    name: title,
+    exType: exType || 'weight_reps',
+    rest_seconds: 90,
+    notes: '',
+    superset_id: null,
+    sets: [defaultSet],
+  });
+  renderExercises();
+  saveDraft();
+}
+
+/* ── Move exercise ─────────────────────────────────────────────── */
+function moveExercise(uid, dir) {
+  const i = routine.exercises.findIndex(e => e._uid === uid);
+  if (i < 0) return;
+  const j = i + dir;
+  if (j < 0 || j >= routine.exercises.length) return;
+  [routine.exercises[i], routine.exercises[j]] = [routine.exercises[j], routine.exercises[i]];
+  renderExercises();
+  saveDraft();
+}
+
+/* ── Remove exercise ──────────────────────────────────────────── */
+function removeExercise(uid) {
+  routine.exercises = routine.exercises.filter(e => e._uid !== uid);
+  renderExercises();
+  saveDraft();
+}
+
+/* ── Add set ─────────────────────────────────────────────────── */
+function addSet(exUid) {
+  const ex = routine.exercises.find(e => e._uid === exUid);
+  if (!ex) return;
+  const { timed } = exTypeInfo(ex.exType);
+  const prev = ex.sets[ex.sets.length - 1];
+  ex.sets.push({
+    _uid: uid(),
+    setType: 'normal',
+    mode: timed ? 'sec' : 'reps',
+    reps: prev ? prev.reps : 10,
+    duration_seconds: prev ? prev.duration_seconds : (timed ? 60 : null),
+    weight_lb: prev ? prev.weight_lb : null,
+  });
+  renderExercises();
+  saveDraft();
+}
+
+/* ── Remove set ─────────────────────────────────────────────────── */
+function removeSet(exUid, setUid) {
+  const ex = routine.exercises.find(e => e._uid === exUid);
+  if (!ex || ex.sets.length <= 1) return;
+  ex.sets = ex.sets.filter(s => s._uid !== setUid);
+  renderExercises();
+  saveDraft();
+}
+
+/* ── Render exercises ───────────────────────────────────────────── */
+function renderExercises() {
+  const list = document.getElementById('exercise-list');
+  const none = document.getElementById('no-exercises');
+  list.innerHTML = '';
+
+  if (routine.exercises.length === 0) {
+    none.classList.remove('hidden');
+    return;
+  }
+  none.classList.add('hidden');
+
+  routine.exercises.forEach((ex, idx) => {
+    const { timed, noWeight } = exTypeInfo(ex.exType);
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+    if (ex.superset_id) card.dataset.sup = ex.superset_id;
+
+    const supOptions = `
+      <option value="">None</option>
+      ${[1,2,3,4,5,6,7,8].map(n =>
+        `<option value="${n}" ${ex.superset_id == n ? 'selected' : ''}>Group ${n}</option>`
+      ).join('')}
+    `;
+
+    // Set rows
+    const setHeaderCols = noWeight
+      ? `<span>#</span><span>Type</span><span>Reps / Duration</span><span></span>`
+      : `<span>#</span><span>Type</span><span>Reps / Duration</span><span>Weight (lb)</span><span></span>`;
+
+    const setRows = ex.sets.map((s, si) => {
+      const modeLabel = s.mode === 'sec' ? 'sec' : 'reps';
+      const amountVal = s.mode === 'sec' ? (s.duration_seconds ?? '') : (s.reps ?? '');
+      const weightCell = noWeight ? '' : `
+        <div class="set-weight">
+          <input type="number" min="0" step="2.5" placeholder="—"
+            value="${s.weight_lb ?? ''}"
+            data-ex="${ex._uid}" data-set="${s._uid}" data-field="weight_lb">
+          <span>lb</span>
+        </div>`;
+      return `
+        <div class="set-row ${noWeight ? 'no-weight' : ''}" data-set-uid="${s._uid}">
+          <span class="set-num">${si + 1}</span>
+          <select class="set-type-sel" data-ex="${ex._uid}" data-set="${s._uid}" data-field="setType">
+            <option value="normal" ${s.setType==='normal'?'selected':''}>Normal</option>
+            <option value="warmup" ${s.setType==='warmup'?'selected':''}>Warmup</option>
+            <option value="dropset" ${s.setType==='dropset'?'selected':''}>Drop set</option>
+          </select>
+          <div class="set-amount">
+            <input type="number" min="0" step="1" placeholder="—"
+              value="${amountVal}"
+              data-ex="${ex._uid}" data-set="${s._uid}" data-field="amount">
+            <button class="set-mode-btn" data-ex="${ex._uid}" data-set="${s._uid}">${modeLabel}</button>
+          </div>
+          ${weightCell}
+          <div class="set-del">
+            <button class="btn-danger" data-action="del-set" data-ex="${ex._uid}" data-set="${s._uid}" title="Remove set">✕</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="ex-card-header">
+        <div class="ex-reorder">
+          <button class="btn-ghost" data-action="move-up" data-uid="${ex._uid}" title="Move up">▲</button>
+          <button class="btn-ghost" data-action="move-down" data-uid="${ex._uid}" title="Move down">▼</button>
+        </div>
+        <span class="ex-name">${esc(ex.name)}</span>
+        <span class="ex-type-badge">${esc(ex.exType.replace(/_/g,' '))}</span>
+        <button class="btn-danger" data-action="del-ex" data-uid="${ex._uid}" title="Remove exercise">✕</button>
+      </div>
+      <div class="ex-card-meta">
+        <label>Rest
+          <input type="number" min="0" step="15" value="${ex.rest_seconds}"
+            data-ex="${ex._uid}" data-field="rest_seconds" style="width:64px">s
+        </label>
+        <label>Superset
+          <select data-ex="${ex._uid}" data-field="superset_id">${supOptions}</select>
+        </label>
+        <label class="meta-notes" style="flex:1">Notes
+          <input type="text" value="${esc(ex.notes)}" placeholder="(optional)"
+            data-ex="${ex._uid}" data-field="notes" style="width:100%">
+        </label>
+      </div>
+      <div class="ex-card-sets">
+        <div class="set-header ${noWeight ? 'no-weight' : ''}">${setHeaderCols}</div>
+        ${setRows}
+      </div>
+      <div class="ex-card-footer">
+        <button class="btn-add" data-action="add-set" data-ex="${ex._uid}">+ Add Set</button>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+}
+
+/* ── Handle card events (delegated) ────────────────────────────── */
+document.getElementById('exercise-list').addEventListener('click', e => {
+  const btn = e.target.closest('button, .set-mode-btn');
+  if (!btn) return;
+  const action = btn.dataset.action;
+
+  if (action === 'move-up') return moveExercise(btn.dataset.uid, -1);
+  if (action === 'move-down') return moveExercise(btn.dataset.uid, 1);
+  if (action === 'del-ex') return removeExercise(btn.dataset.uid);
+  if (action === 'add-set') return addSet(btn.dataset.ex);
+  if (action === 'del-set') return removeSet(btn.dataset.ex, btn.dataset.set);
+
+  // Toggle reps/sec mode
+  if (btn.classList.contains('set-mode-btn')) {
+    const ex = routine.exercises.find(e => e._uid === btn.dataset.ex);
+    const s = ex && ex.sets.find(s => s._uid === btn.dataset.set);
+    if (!s) return;
+    s.mode = s.mode === 'reps' ? 'sec' : 'reps';
+    renderExercises();
+    saveDraft();
+  }
+});
+
+document.getElementById('exercise-list').addEventListener('change', e => {
+  const el = e.target;
+  const exUid = el.dataset.ex;
+  const field = el.dataset.field;
+  if (!exUid || !field) return;
+
+  const ex = routine.exercises.find(e => e._uid === exUid);
+  if (!ex) return;
+
+  if (el.dataset.set) {
+    // Set-level field
+    const s = ex.sets.find(s => s._uid === el.dataset.set);
+    if (!s) return;
+    if (field === 'setType') s.setType = el.value;
+    if (field === 'amount') {
+      const v = el.value === '' ? null : Number(el.value);
+      if (s.mode === 'sec') { s.duration_seconds = v; s.reps = null; }
+      else { s.reps = v; s.duration_seconds = null; }
+    }
+    if (field === 'weight_lb') s.weight_lb = el.value === '' ? null : Number(el.value);
+  } else {
+    // Exercise-level field
+    if (field === 'rest_seconds') ex.rest_seconds = Number(el.value) || 90;
+    if (field === 'superset_id') {
+      ex.superset_id = el.value ? Number(el.value) : null;
+      // Update card border color without full re-render
+      const card = el.closest('.ex-card');
+      if (card) {
+        if (ex.superset_id) card.dataset.sup = ex.superset_id;
+        else delete card.dataset.sup;
+      }
+    }
+    if (field === 'notes') ex.notes = el.value;
+  }
+  saveDraft();
+});
+
+document.getElementById('exercise-list').addEventListener('input', e => {
+  const el = e.target;
+  if (!el.dataset.ex || !el.dataset.field) return;
+  // Trigger change for inputs (amount, weight_lb, notes, rest)
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+});
+
+/* ── Search events ─────────────────────────────────────────────── */
+document.getElementById('search-input').addEventListener('input', e => {
+  renderSearchResults(e.target.value);
+});
+document.getElementById('muscle-filter').addEventListener('change', () => {
+  renderSearchResults(document.getElementById('search-input').value);
+});
+document.getElementById('equip-filter').addEventListener('change', () => {
+  renderSearchResults(document.getElementById('search-input').value);
+});
+
+document.getElementById('search-results').addEventListener('click', e => {
+  const btn = e.target.closest('.search-item-add');
+  if (!btn) return;
+  addExercise(btn.dataset.id, btn.dataset.title, btn.dataset.extype);
+});
+
+/* ── Routine meta events ────────────────────────────────────────── */
+document.getElementById('routine-title').addEventListener('input', e => {
+  routine.title = e.target.value;
+  saveDraft();
+});
+document.getElementById('routine-notes').addEventListener('input', e => {
+  routine.notes = e.target.value;
+  saveDraft();
+});
+
+/* ── Settings ─────────────────────────────────────────────────── */
+function openSettings() { document.getElementById('settings-overlay').classList.remove('hidden'); }
+function closeSettings() { document.getElementById('settings-overlay').classList.add('hidden'); }
+
+document.getElementById('settings-btn').addEventListener('click', openSettings);
+document.getElementById('settings-close').addEventListener('click', closeSettings);
+document.getElementById('settings-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('settings-overlay')) closeSettings();
+});
+
+document.querySelectorAll('.radio-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.radio-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    settings.mode = btn.dataset.mode;
+    document.getElementById('api-key-group').style.display =
+      settings.mode === 'direct' ? '' : 'none';
+    saveSettings();
+  });
+});
+
+document.getElementById('api-key-input').addEventListener('input', e => {
+  settings.apiKey = e.target.value;
+  saveSettings();
+});
+document.getElementById('proxy-url-input').addEventListener('input', e => {
+  settings.proxyUrl = e.target.value;
+  saveSettings();
+});
+document.getElementById('folder-id-input').addEventListener('input', e => {
+  settings.folderId = e.target.value;
+  saveSettings();
+});
+document.getElementById('clear-draft-btn').addEventListener('click', () => {
+  clearDraft();
+  routine = { title: '', notes: '', exercises: [] };
+  document.getElementById('routine-title').value = '';
+  document.getElementById('routine-notes').value = '';
+  renderExercises();
+  closeSettings();
+  setStatus('Draft cleared.', '');
+});
+
+// Apply saved settings on load
+function applySavedSettings() {
+  document.getElementById('api-key-input').value = settings.apiKey || '';
+  document.getElementById('proxy-url-input').value = settings.proxyUrl || 'http://localhost:8000';
+  document.getElementById('folder-id-input').value = settings.folderId || '';
+  document.getElementById('api-key-group').style.display = settings.mode === 'direct' ? '' : 'none';
+  document.querySelectorAll('.radio-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === settings.mode);
+  });
+}
+
+/* ── Draft banner ─────────────────────────────────────────────── */
+function checkDraft() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const draft = JSON.parse(raw);
+    if (!draft.title && (!draft.exercises || draft.exercises.length === 0)) return;
+    document.getElementById('draft-title').textContent = draft.title || '(untitled)';
+    document.getElementById('draft-banner').classList.remove('hidden');
+
+    document.getElementById('draft-restore-btn').onclick = () => {
+      restoreRoutine(draft);
+      document.getElementById('draft-banner').classList.add('hidden');
+    };
+    document.getElementById('draft-dismiss-btn').onclick = () => {
+      document.getElementById('draft-banner').classList.add('hidden');
+      clearDraft();
+    };
+  } catch (e) { /* ignore */ }
+}
+
+function restoreRoutine(data) {
+  // Ensure all exercises/sets have _uid
+  routine.exercises = (data.exercises || []).map(ex => ({
+    ...ex,
+    _uid: ex._uid || uid(),
+    sets: (ex.sets || []).map(s => ({ ...s, _uid: s._uid || uid() })),
+  }));
+  routine.title = data.title || '';
+  routine.notes = data.notes || '';
+  document.getElementById('routine-title').value = routine.title;
+  document.getElementById('routine-notes').value = routine.notes;
+  renderExercises();
+}
+
+/* ── Build API payload (lb → kg) ───────────────────────────────── */
+function buildApiPayload() {
+  const exercises = routine.exercises.map(ex => ({
+    exercise_template_id: ex.id,
+    superset_id: ex.superset_id || null,
+    rest_seconds: ex.rest_seconds || 90,
+    notes: ex.notes || '',
+    sets: ex.sets.map(s => ({
+      type: s.setType || 'normal',
+      weight_kg: s.weight_lb != null ? Math.round(s.weight_lb * 0.453592 * 1000) / 1000 : null,
+      reps: s.mode === 'reps' ? (s.reps ?? null) : null,
+      duration_seconds: s.mode === 'sec' ? (s.duration_seconds ?? null) : null,
+    })),
+  }));
+  return {
+    routine: {
+      title: routine.title,
+      folder_id: settings.folderId || null,
+      notes: routine.notes || '',
+      exercises,
+    },
+  };
+}
+
+/* ── Push to Hevy ──────────────────────────────────────────────── */
+document.getElementById('push-btn').addEventListener('click', async () => {
+  if (!routine.title.trim()) {
+    return setStatus('Please enter a routine title.', 'err');
+  }
+  if (routine.exercises.length === 0) {
+    return setStatus('Add at least one exercise.', 'err');
+  }
+
+  const payload = buildApiPayload();
+  setStatus('Pushing to Hevy…', '');
+  document.getElementById('push-btn').disabled = true;
+
+  try {
+    let resp;
+    if (settings.mode === 'direct') {
+      if (!settings.apiKey) {
+        document.getElementById('push-btn').disabled = false;
+        return setStatus('Enter your API key in Settings.', 'err');
+      }
+      resp = await fetch('https://api.hevyapp.com/v1/routines', {
+        method: 'POST',
+        headers: { 'api-key': settings.apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } else {
+      resp = await fetch(`${settings.proxyUrl}/proxy/routines`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    }
+
+    if (!resp.ok) {
+      const txt = await resp.text();
+      throw new Error(`${resp.status}: ${txt}`);
+    }
+    const data = await resp.json();
+    const raw = data.routine || data.routines || [];
+    const created = Array.isArray(raw) ? raw[0] : raw;
+    const routineId = created?.id || '?';
+    setStatus(`✓ Routine created! ID: ${routineId}`, 'ok');
+    clearDraft();
+  } catch (err) {
+    setStatus(`Error: ${err.message}`, 'err');
+    console.error(err);
+  } finally {
+    document.getElementById('push-btn').disabled = false;
+  }
+});
+
+/* ── Save as JSON ─────────────────────────────────────────────── */
+document.getElementById('save-json-btn').addEventListener('click', () => {
+  const output = {
+    title: routine.title || 'My Workout',
+    notes: routine.notes || '',
+    exercises: routine.exercises.map(ex => ({
+      name: ex.name,
+      rest_seconds: ex.rest_seconds,
+      notes: ex.notes || '',
+      ...(ex.superset_id ? { superset_id: ex.superset_id } : {}),
+      sets: ex.sets.map(s => {
+        const set = { type: s.setType || 'normal' };
+        if (s.mode === 'sec') {
+          set.duration_seconds = s.duration_seconds ?? 60;
+        } else {
+          set.reps = s.reps ?? 10;
+          if (s.weight_lb != null) set.weight_lb = s.weight_lb;
+        }
+        return set;
+      }),
+    })),
+  };
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${(routine.title || 'workout').replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+  a.click();
+  setStatus('JSON saved.', 'ok');
+});
+
+/* ── Load JSON ─────────────────────────────────────────────────── */
+document.getElementById('load-json-btn').addEventListener('click', () => {
+  document.getElementById('load-json-input').click();
+});
+document.getElementById('load-json-input').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Map exercise names to IDs from cache
+      const byTitle = {};
+      const byLower = {};
+      exerciseCache.forEach(t => {
+        byTitle[t.title] = t;
+        byLower[t.title.toLowerCase()] = t;
+      });
+
+      const exercises = (data.exercises || []).map(ex => {
+        const template = byTitle[ex.name] || byLower[(ex.name || '').toLowerCase()];
+        if (!template) {
+          setStatus(`Warning: exercise not found in cache: "${ex.name}"`, 'err');
+        }
+        return {
+          _uid: uid(),
+          id: template ? template.id : '',
+          name: ex.name,
+          exType: template ? (template.type || 'weight_reps') : 'weight_reps',
+          rest_seconds: ex.rest_seconds || 90,
+          notes: ex.notes || '',
+          superset_id: ex.superset_id || null,
+          sets: (ex.sets || []).map(s => ({
+            _uid: uid(),
+            setType: s.type || 'normal',
+            mode: 'duration_seconds' in s ? 'sec' : 'reps',
+            reps: s.reps ?? null,
+            duration_seconds: s.duration_seconds ?? null,
+            weight_lb: s.weight_lb ?? null,
+          })),
+        };
+      });
+
+      routine.title = data.title || '';
+      routine.notes = data.notes || '';
+      routine.exercises = exercises;
+      document.getElementById('routine-title').value = routine.title;
+      document.getElementById('routine-notes').value = routine.notes;
+      renderExercises();
+      saveDraft();
+      setStatus(`Loaded "${routine.title || 'routine'}" — ${exercises.length} exercises.`, 'ok');
+    } catch (err) {
+      setStatus(`Failed to parse JSON: ${err.message}`, 'err');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+/* ── Status message ─────────────────────────────────────────────── */
+let _statusTimer;
+function setStatus(msg, type) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg;
+  el.className = type;
+  clearTimeout(_statusTimer);
+  if (msg) _statusTimer = setTimeout(() => { el.textContent = ''; el.className = ''; }, 6000);
+}
+
+/* ── Escape HTML ─────────────────────────────────────────────────── */
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ────────────────────────────────────────────────────────── */
+applySavedSettings();
+checkDraft();
+renderExercises();
+loadCache();
+</script>
+</body>
+</html>
