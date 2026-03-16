@@ -1,0 +1,74 @@
+{
+  "title": "Upperbody Workout",
+  "notes": "",
+  "exercises": [
+    {
+      "name": "Lat Pulldown",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 70 },
+        { "reps": 8,  "weight_lb": 85 },
+        { "reps": 5,  "weight_lb": 100 }
+      ]
+    },
+    {
+      "name": "Cable Rope Tricep Pushdown",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 20 },
+        { "reps": 8,  "weight_lb": 25 },
+        { "reps": 5,  "weight_lb": 30 }
+      ]
+    },
+    {
+      "name": "Arsenal Chest Press",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 0,  "type": "warmup" },
+        { "reps": 8,  "weight_lb": 30 },
+        { "reps": 5,  "weight_lb": 50 }
+      ]
+    },
+    {
+      "name": "Seated Dumbbell Military Press",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 15 },
+        { "reps": 8,  "weight_lb": 20 },
+        { "reps": 5,  "weight_lb": 22.5 }
+      ]
+    },
+    {
+      "name": "Seated Alternating Dumbbell Bicep Curl",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 20, "weight_lb": 20 },
+        { "reps": 16, "weight_lb": 20 },
+        { "reps": 10, "weight_lb": 20 }
+      ]
+    },
+    {
+      "name": "Ab marches w/ 25lb Plate",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 30, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 25 }
+      ]
+    },
+    {
+      "name": "Standing Oblique Leans",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 30, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 25 }
+      ]
+    }
+  ]
+}

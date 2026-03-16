@@ -1,0 +1,109 @@
+{
+  "title": "Lowerbody Workout",
+  "notes": "",
+  "exercises": [
+    {
+      "name": "Smith Machine Box Squat",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 12, "weight_lb": 55 },
+        { "reps": 12, "weight_lb": 105 }
+      ]
+    },
+    {
+      "name": "Leg Press",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 12, "weight_lb": 50 },
+        { "reps": 12, "weight_lb": 90 }
+      ]
+    },
+    {
+      "name": "Prone Lying Hamstring Curl Machine",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 10, "weight_lb": 40 },
+        { "reps": 10, "weight_lb": 40 }
+      ]
+    },
+    {
+      "name": "Leg Extension Machine",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "reps": 12, "weight_lb": 40 },
+        { "reps": 12, "weight_lb": 40 }
+      ]
+    },
+    {
+      "name": "Hip Abductor Machine",
+      "rest_seconds": 60,
+      "notes": "Superset with adductor",
+      "superset_id": 1,
+      "sets": [
+        { "reps": 10, "weight_lb": 70 },
+        { "reps": 10, "weight_lb": 70 }
+      ]
+    },
+    {
+      "name": "Hip Adductor Machine",
+      "rest_seconds": 60,
+      "notes": "Superset with abductor",
+      "superset_id": 1,
+      "sets": [
+        { "reps": 10, "weight_lb": 70 },
+        { "reps": 10, "weight_lb": 70 }
+      ]
+    },
+    {
+      "name": "Walking Lunge",
+      "rest_seconds": 90,
+      "notes": "Weighted",
+      "sets": [
+        { "reps": 10, "weight_lb": 20 },
+        { "reps": 10, "weight_lb": 20 }
+      ]
+    },
+    {
+      "name": "Feet Elevated Calf Raise",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "reps": 15 },
+        { "reps": 15 }
+      ]
+    },
+    {
+      "name": "Table Top Crunch",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 }
+      ]
+    },
+    {
+      "name": "Lying Leg Raises",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 },
+        { "duration_seconds": 30 }
+      ]
+    },
+    {
+      "name": "Assault Bike",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 45 },
+        { "duration_seconds": 45 }
+      ]
+    }
+  ]
+}

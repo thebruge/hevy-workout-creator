@@ -1,0 +1,86 @@
+{
+  "title": "Full Body Strength",
+  "notes": "",
+  "exercises": [
+    {
+      "name": "Kettlebell Box Squat",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 25 },
+        { "duration_seconds": 45, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 30 }
+      ]
+    },
+    {
+      "name": "Gorilla Row",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 25 },
+        { "duration_seconds": 45, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 30 }
+      ]
+    },
+    {
+      "name": "Hands Elevated Push Up",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60 },
+        { "duration_seconds": 45 },
+        { "duration_seconds": 30 }
+      ]
+    },
+    {
+      "name": "Kettlebell Romanian Deadlift",
+      "rest_seconds": 90,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 35 },
+        { "duration_seconds": 45, "weight_lb": 35 },
+        { "duration_seconds": 30, "weight_lb": 45 }
+      ]
+    },
+    {
+      "name": "Forearm Plank",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60 },
+        { "duration_seconds": 45 },
+        { "duration_seconds": 30 }
+      ]
+    },
+    {
+      "name": "Dead Ball Slam",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 20 },
+        { "duration_seconds": 45, "weight_lb": 20 },
+        { "duration_seconds": 30, "weight_lb": 30 }
+      ]
+    },
+    {
+      "name": "Kettlebell Farmers Carry",
+      "rest_seconds": 60,
+      "notes": "Two kettlebells",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 30 },
+        { "duration_seconds": 45, "weight_lb": 30 },
+        { "duration_seconds": 30, "weight_lb": 45 }
+      ]
+    },
+    {
+      "name": "Sled Push",
+      "rest_seconds": 60,
+      "notes": "",
+      "sets": [
+        { "duration_seconds": 60, "weight_lb": 25 },
+        { "duration_seconds": 45, "weight_lb": 25 },
+        { "duration_seconds": 30, "weight_lb": 25 }
+      ]
+    }
+  ]
+}
