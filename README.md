@@ -153,3 +153,22 @@ Open the output file with `file://` in your browser. Switch to **Direct** mode i
 - `POST /v1/workouts` logs a completed session (use for after-the-fact logging)
 - Exercise names in Hevy may differ from common usage — always verify with `list-exercises --search`
 - Fuzzy matching will warn you when an exact name isn't found and show alternate candidates
+
+## Versioning
+
+The project uses [Semantic Versioning](https://semver.org/), with each release recorded in
+[`CHANGELOG.md`](CHANGELOG.md) and tagged `vX.Y.Z` in git.
+
+- **Major:** a breaking change to the workout JSON format or a command's flags (from 1.0.0 on)
+- **Minor:** a new command, flag or UI feature
+- **Patch:** bug fixes and docs
+
+Add each change under `## [Unreleased]` in the changelog as you make it. To release, move those
+entries under a new `## [X.Y.Z] - YYYY-MM-DD` heading, update the compare links at the bottom of
+the changelog, then commit and tag:
+
+```bash
+git commit -am "chore(release): vX.Y.Z"
+git tag -a vX.Y.Z -m "vX.Y.Z"
+git push origin main vX.Y.Z
+```
