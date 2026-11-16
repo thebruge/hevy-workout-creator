@@ -175,3 +175,7 @@ git commit -am "chore(release): vX.Y.Z"
 git tag -a vX.Y.Z -m "vX.Y.Z"
 git push origin main vX.Y.Z
 ```
+
+## License
+
+[MIT](LICENSE)

@@ -7,6 +7,10 @@ README's Versioning section.
 
 ## [Unreleased]
 
+### Added
+
+- MIT license.
+
 ## [0.1.2] - 2026-11-15
 
 ### Security
