@@ -7,6 +7,8 @@ README's Versioning section.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-15
+
 ### Fixed
 - `build-ui` works again. The committed `index.html` had been baked with the
   exercise cache (2026-03-25), so `build-ui` couldn't find its placeholder; the
@@ -41,5 +43,6 @@ First versioned release, covering the work done since March 2026.
 - Routine creation reads the Hevy API's response correctly.
 - Exercise names in the workouts match Hevy's catalog.
 
-[Unreleased]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/thebruge/hevy-workout-creator/releases/tag/v0.1.0
