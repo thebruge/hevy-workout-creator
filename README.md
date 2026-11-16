@@ -124,12 +124,15 @@ Open `http://localhost:8000` in your browser, build your routine, click **Push t
 
 ### Standalone mode (offline)
 
-Bake the exercise cache directly into `index.html` so it works without a server:
+Bake the exercise cache into a standalone copy of the UI so it works without a server:
 
 ```bash
-python hevy.py build-ui                      # overwrites index.html
+python hevy.py build-ui                      # writes hevy_ui.html (gitignored)
 python hevy.py build-ui --output my_ui.html  # write to a different file
 ```
+
+`index.html` is the template `build-ui` reads from, so it's never overwritten; it has to keep its
+`/* __EXERCISE_CACHE_PLACEHOLDER__ */` line.
 
 Open the output file with `file://` in your browser. Switch to **Direct** mode in Settings, enter your API key, and push.
 

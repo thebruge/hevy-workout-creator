@@ -7,6 +7,16 @@ README's Versioning section.
 
 ## [Unreleased]
 
+### Fixed
+- `build-ui` works again. The committed `index.html` had been baked with the
+  exercise cache (2026-03-25), so `build-ui` couldn't find its placeholder; the
+  placeholder is back.
+
+### Changed
+- `build-ui` writes to `hevy_ui.html` (gitignored) by default instead of over
+  `index.html`, and refuses an `--output` that is `index.html`, so the template
+  can't be overwritten again.
+
 ## [0.1.0] - 2026-11-15
 
 First versioned release, covering the work done since March 2026.

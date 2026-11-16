@@ -22,11 +22,11 @@ before changing behaviour.
   converts; keep that conversion in one place.
 - `serve` keeps the API key on the server and adds it when proxying to Hevy. Don't
   move the key into the page.
-- `build-ui` replaces `/* __EXERCISE_CACHE_PLACEHOLDER__ */` in `index.html` and
-  by default writes the result over `index.html`. The committed `index.html` was
-  baked on 2026-03-25 and no longer has the placeholder, so `build-ui` fails
-  until it's restored. Use `--output` for baked copies, and don't commit one as
-  `index.html`.
+- `index.html` is a template: `build-ui` replaces its
+  `/* __EXERCISE_CACHE_PLACEHOLDER__ */` line with the exercise cache and writes
+  the result to `hevy_ui.html` (gitignored) or `--output`. It refuses to write
+  over `index.html`. Keep the placeholder line, and never commit a baked
+  `index.html` (one was committed by mistake on 2026-03-25 and broke `build-ui`).
 - The README's setup line mentions `requirements.txt`, which doesn't exist yet;
   the dependencies are `requests` and `python-dotenv`.
 - `create-routine` without `--dry-run` creates a real routine in my Hevy account.

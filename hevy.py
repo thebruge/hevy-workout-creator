@@ -421,7 +421,7 @@ def cmd_serve(args):
 
 
 def cmd_build_ui(args):
-    """Bake exercise_cache.json into index.html for standalone offline use."""
+    """Bake exercise_cache.json into a copy of index.html for standalone offline use."""
     cache = load_cache()
     cache_json = json.dumps(cache["all"], separators=(",", ":"))
 
@@ -436,8 +436,12 @@ def cmd_build_ui(args):
         print("ERROR: sentinel comment not found in index.html.")
         sys.exit(1)
 
+    output = Path(args.output) if args.output else source.with_name("hevy_ui.html")
+    if output.resolve() == source.resolve():
+        print("ERROR: --output can't be index.html — it's the template build-ui reads from.")
+        sys.exit(1)
+
     baked = html.replace(sentinel, f"window.EXERCISE_CACHE = {cache_json};")
-    output = Path(args.output)
     output.write_text(baked)
     print(f"Built standalone UI → {output}")
     print(f"  Baked {len(cache['all'])} exercises")
@@ -474,8 +478,8 @@ def main():
     p_serve.add_argument("--port", type=int, default=8000, help="Port to listen on (default: 8000)")
 
     # build-ui
-    p_build = sub.add_parser("build-ui", help="Bake exercise cache into index.html for offline use")
-    p_build.add_argument("--output", default="index.html", help="Output file (default: index.html)")
+    p_build = sub.add_parser("build-ui", help="Bake exercise cache into a standalone copy of the UI")
+    p_build.add_argument("--output", help="Output file (default: hevy_ui.html next to hevy.py)")
 
     args = parser.parse_args()
     {
