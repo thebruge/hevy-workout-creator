@@ -7,6 +7,8 @@ README's Versioning section.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-15
+
 ### Security
 - `serve` only serves `index.html` and `exercise_cache.json`. It used to serve
   the whole project folder, so `http://localhost:8000/.env` returned the Hevy API
@@ -49,6 +51,7 @@ First versioned release, covering the work done since March 2026.
 - Routine creation reads the Hevy API's response correctly.
 - Exercise names in the workouts match Hevy's catalog.
 
-[Unreleased]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/thebruge/hevy-workout-creator/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/thebruge/hevy-workout-creator/releases/tag/v0.1.0
