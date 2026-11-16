@@ -7,6 +7,12 @@ README's Versioning section.
 
 ## [Unreleased]
 
+### Security
+- `serve` only serves `index.html` and `exercise_cache.json`. It used to serve
+  the whole project folder, so `http://localhost:8000/.env` returned the Hevy API
+  key, and `hevy.py` and `workouts/` were readable too. Everything else now gets
+  a 404.
+
 ## [0.1.1] - 2026-11-15
 
 ### Fixed

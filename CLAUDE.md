@@ -21,7 +21,10 @@ before changing behaviour.
 - Hevy stores weights in kg. Workout JSON may use `weight_lb`, which `hevy.py`
   converts; keep that conversion in one place.
 - `serve` keeps the API key on the server and adds it when proxying to Hevy. Don't
-  move the key into the page.
+  move the key into the page. It serves only the files in `served_files` in
+  `cmd_serve` (`index.html`, `exercise_cache.json`); the project folder holds
+  `.env`, so never fall back to serving the whole directory. Add a file there
+  only if the page needs it.
 - `index.html` is a template: `build-ui` replaces its
   `/* __EXERCISE_CACHE_PLACEHOLDER__ */` line with the exercise cache and writes
   the result to `hevy_ui.html` (gitignored) or `--output`. It refuses to write

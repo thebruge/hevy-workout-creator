@@ -365,10 +365,33 @@ def cmd_serve(args):
         sys.exit(1)
 
     ui_dir = Path(__file__).parent
+    # Only the files the UI loads. Everything else in the project folder (.env
+    # with the API key, workouts/, hevy.py) gets a 404.
+    served_files = {
+        "/": "/index.html",
+        "/index.html": "/index.html",
+        "/exercise_cache.json": "/exercise_cache.json",
+    }
 
     class HevyHandler(SimpleHTTPRequestHandler):
         def __init__(self, *a, **kw):
             super().__init__(*a, directory=str(ui_dir), **kw)
+
+        def _allow_static(self):
+            path = self.path.split("?", 1)[0].split("#", 1)[0]
+            if path not in served_files:
+                self.send_error(404)
+                return False
+            self.path = served_files[path]
+            return True
+
+        def do_GET(self):
+            if self._allow_static():
+                super().do_GET()
+
+        def do_HEAD(self):
+            if self._allow_static():
+                super().do_HEAD()
 
         def do_OPTIONS(self):
             self.send_response(200)
